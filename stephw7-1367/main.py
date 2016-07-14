@@ -79,7 +79,7 @@ def final_evaluate(board):
         return 0
 
 def construct_tree(g):
-    # to prevent the calculation time transcends
+    # to prevent that the calculation time transcends 15 seconds, I constraine depth of the tree.
     if len(g.ValidMoves()) <= 4:
         depth = 5
     else:
@@ -108,13 +108,13 @@ def expand_tree(root, g, depth, root_value):  # DFS algorithm, alpha-beta prunin
     temp = root
     if depth > 0:  # if this is not the deepest depth, expand the tree
         g['valid_moves'] = FindValidMove(g['board'], g['side'])  # find the next valid move from the board
-        if g['valid_moves'] == []:
+        if g['valid_moves'] == []: # if there is no valid moves
             g['side'] = 3 - g['side']
             temp.add_children(g['board'], 'pass')
             expand_tree(temp.children[-1], g, depth - 1, temp.value)
             temp.refresh()
 
-        elif g['valid_moves'] == True:
+        elif g['valid_moves'] == True: # if the board is filled with pieces, evaluate which side wins
             temp.value = final_evaluate(temp.board)
             #print("inside ")
             #print('move is {0}, board is {1}, value is {2}'.format(temp.move, temp.board, temp.value))
@@ -236,7 +236,7 @@ def FindValidMove(board, side):
     opponent = 3 - side
     opponent_loc = []
     valid_loc = []
-    is_full = 1  # flag if the board is filled with pieces
+    is_full = 1  # flag. whether the board is filled with pieces
     directions = [[0, 1], [1, 0], [-1, 0], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]]
     for x in range(1, 9):
         for y in range(1, 9):
